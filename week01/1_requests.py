@@ -25,9 +25,9 @@ def get_page_text(url):
   headers = {'user-agent': get_user_agent()}
   response = requests.get(url, headers=headers)
   print("------------------")
-  print(url)
-  print(response)
-  print(re.search('<title>*</title>', response.text))
+  print('Request Url      :', url)
+  print('Response Status  :', response.status_code)
+  print('Page Title       :', re.findall(r'<title>(.+?)</title>', response.text)[0] | 'null')
   print("------------------")
   return response.text;
 
@@ -53,44 +53,47 @@ def robbot(listUrl, multiplier, find_film_urls_fun, xpaths, save_path):
   pd_movie = pd.DataFrame(data = film_infos)
   pd_movie.to_csv(save_path + '.csv', encoding='utf8', index=False, header=False)
 
-# Douban movie
-# db_list_url = 'https://movie.douban.com/top250?start={page}&filter='
-# db_multiplier = 25
-# db_xpaths = [
-#   '//*[@id="content"]/h1/span[1]/text()',
-#   '//*[@id="info"]/span[10]/text()',
-#   '//*[@id="interest_sectl"]/div[1]/div[2]/strong/text()'
-# ];
-# db_save_path = '1_db_requests'
+def doubanRobot():
+  db_list_url = 'https://movie.douban.com/top250?start={page}&filter='
+  db_multiplier = 25
+  db_xpaths = [
+    '//*[@id="content"]/h1/span[1]/text()',
+    '//*[@id="info"]/span[10]/text()',
+    '//*[@id="interest_sectl"]/div[1]/div[2]/strong/text()'
+  ];
+  db_save_path = '1_db_requests'
 
-# def db_find_film_urls(info):
-#   urls = []
-#   for tags in info.findAll('div', attrs={ 'class': 'hd' }):
-#     for atag in tags.findAll('a'):
-#       urls.append(atag.get('href'))
-#   return urls
+  def db_find_film_urls(info):
+    urls = []
+    for tags in info.findAll('div', attrs={ 'class': 'hd' }):
+      for atag in tags.findAll('a'):
+        urls.append(atag.get('href'))
+    return urls
 
-# robbot(db_list_url, db_multiplier, db_find_film_urls, db_xpaths, db_save_path)
+  robbot(db_list_url, db_multiplier, db_find_film_urls, db_xpaths, db_save_path)
 
-# Maoyan movie
-def my_find_film_urls(info):
-  urls = []
-  for tags in info.findAll('div', attrs={ 'class': 'movie-item-hover' }):
-    for atag in tags.findAll('a'):
-      urls.append('https://maoyan.com/' + atag.get('href'))
-  return urls
+def maoyanRobot():
+  def my_find_film_urls(info):
+    urls = []
+    for tags in info.findAll('div', attrs={ 'class': 'movie-item-hover' }):
+      for atag in tags.findAll('a'):
+        urls.append('https://maoyan.com/' + atag.get('href'))
+    return urls
 
-my_list_url = 'https://maoyan.com/films?showType=2&offset={page}'
-my_multiplier = 30
+  my_list_url = 'https://maoyan.com/films?showType=2&offset={page}'
+  my_multiplier = 30
 
-my_xpaths = [
-  '//*[@class="movie-brief-container"]/h1',
-  '//*[@class="movie-brief-container"]/div',
-  '//*[@class="movie-brief-container"]/ul/li[1]/a[1]',
-  '//*[@class="conmovie-brief-containertent"]/ul/li[1]/a[2]',
-  '//*[@class="movie-brief-container"]/ul/li[3]'
-];
+  my_xpaths = [
+    '//*[@class="movie-brief-container"]/h1',
+    '//*[@class="movie-brief-container"]/div',
+    '//*[@class="movie-brief-container"]/ul/li[1]/a[1]',
+    '//*[@class="conmovie-brief-containertent"]/ul/li[1]/a[2]',
+    '//*[@class="movie-brief-container"]/ul/li[3]'
+  ];
 
-my_save_path = '1_my_requests'
+  my_save_path = '1_my_requests'
 
-robbot(my_list_url, my_multiplier, my_find_film_urls, my_xpaths, my_save_path)
+  robbot(my_list_url, my_multiplier, my_find_film_urls, my_xpaths, my_save_path)
+
+# doubanRobot()
+maoyanRobot()
