@@ -1,0 +1,29 @@
+{
+  "name": "Python001-class01",
+  "version": "1.0.0",
+  "description": "请大家通过该链接查看讲师课件并进行下载， 链接: https://pan.baidu.com/s/1bwl0b6ooKKzBi0tc_MCB_w 密码:1iu4",
+  "main": "index.js",
+  "dependencies": {},
+  "devDependencies": {
+    "cz-conventional-changelog": "^3.2.0"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mayon/Python001-class01.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/mayon/Python001-class01/issues"
+  },
+  "homepage": "https://github.com/mayon/Python001-class01#readme",
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-conventional-changelog"
+    }
+  }
+}
