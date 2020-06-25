@@ -39,75 +39,62 @@ def get_page_text(url):
   print("------------------")
   print('Request Url      :', url)
   print('Response Status  :', response.status_code)
-  return response.text;
+  return response.text
 
-def robot(listUrl, multiplier, find_film_urls_fun, xpaths, file_name):
-  # Get film urls
-  film_urls = []
-  page_num = 2;
-  list_urls = tuple((re.sub('{page}', str(page * multiplier), listUrl)) for page in range(page_num))
-  for list_url in list_urls:
-    bs_info = bs(get_page_text(list_url), 'html.parser')
-    film_urls += find_film_urls_fun(bs_info)
+def get_pages_xpath_info(urls, host = '', xpaths = [], xpath = ''):
+  infos = [];
+  for url in urls:
+    selector = lxml.etree.HTML(get_page_text(host + url))
+    if xpath:
+      infos += selector.xpath(xpath)
+    for xp in xpaths:
+      infos += selector.xpath(xp)
     sleep(2)
+  return infos
 
-  # Get film infos
-  film_infos = [];
-  for film_url in film_urls:
-    selector = lxml.etree.HTML(get_page_text(film_url))
-    for lxml_xpath in xpaths:
-      lxml_info = selector.xpath(lxml_xpath)
-      if (len(lxml_info)):
-        film_infos.append(lxml_info[0]);
-    sleep(2)
-
-  # Save film infos
-  pd_movie = pd.DataFrame(data = film_infos)
+def saveToCSV(file_data, file_name):
+  pd_movie = pd.DataFrame(data = file_data)
   path = os.path.abspath(os.path.dirname(__file__))
   pd_movie.to_csv(path + '/' + file_name + '.csv', encoding='utf8', index=False, header=False)
 
 def doubanRobot():
+  list_num = 2;
+  list_perpage = 25
   list_url = 'https://movie.douban.com/top250?start={page}&filter='
-  multiplier = 25
-  xpaths = [
+  url_xpath = '//*[@class="hd"]/a/@href'
+  info_xpaths = [
     '//*[@id="content"]/h1/span[1]/text()',
     '//*[@id="info"]/span[10]/text()',
     '//*[@id="interest_sectl"]/div[1]/div[2]/strong/text()'
   ];
-  file_name = '1_db_requests'
-
-  def find_film_urls(info):
-    urls = []
-    for tags in info.findAll('div', attrs={ 'class': 'hd' }):
-      for atag in tags.findAll('a'):
-        urls.append(atag.get('href'))
-    print('Douban Film Urls : ', urls)
-    return urls
-
-  robot(list_url, multiplier, find_film_urls, xpaths, file_name)
+  file_name = '1_db_requests2'
+  
+  list_urls = tuple((re.sub('{page}', str(page * list_perpage), list_url)) for page in range(list_num))
+  film_urls = get_pages_xpath_info(list_urls, xpath = url_xpath)
+  film_infos = get_pages_xpath_info(film_urls, xpaths = info_xpaths);
+  saveToCSV(film_infos, file_name);
+  print('Douban Film Infos : ', film_infos)
 
 def maoyanRobot():
-  list_url = 'https://maoyan.com/films?showType=2&offset={page}'
-  multiplier = 30
-  xpaths = [
+  list_num = 2
+  list_perpage = 30
+  list_url = 'https://maoyan.com/films?showType=3&offset={page}'
+  url_xpath = '//*[@class="movie-item-hover"]/a/@href'
+  info_xpaths = [
     '//*[@class="movie-brief-container"]/h1/text()',
     '//*[@class="movie-brief-container"]/div/text()',
     '//*[@class="movie-brief-container"]/ul/li[1]/a[1]/text()',
     '//*[@class="movie-brief-container"]/ul/li[1]/a[2]/text()',
     '//*[@class="movie-brief-container"]/ul/li[3]/text()'
   ];
-  file_name = '1_my_requests'
-
-  def find_film_urls(info):
-    print('Maoyan Page Title: ', re.findall('<title>(.+?)</title>', str(info))[0])
-    urls = []
-    for tags in info.findAll('div', attrs={ 'class': 'movie-item-hover' }):
-      for atag in tags.findAll('a'):
-        urls.append('https://maoyan.com' + atag.get('href'))
-    print('Maoyan Film Urls : ', urls)
-    return urls
-
-  robot(list_url, multiplier, find_film_urls, xpaths, file_name)
+  file_name = '1_my_requests2'
+  url_host = 'https://maoyan.com'
+  
+  list_urls = tuple((re.sub('{page}', str(page * list_perpage), list_url)) for page in range(list_num))
+  film_urls = get_pages_xpath_info(list_urls, xpath = url_xpath)
+  film_infos = get_pages_xpath_info(film_urls, xpaths = info_xpaths, host = url_host);
+  saveToCSV(film_infos, file_name);
+  print('Maoyan Film Infos : ', film_infos)
 
 doubanRobot()
 maoyanRobot()
