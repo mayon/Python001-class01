@@ -26,6 +26,6 @@ class SpidersPipeline:
         time = '上映时间：' + item['time']
         content = '影片简介：' + item['content']
         output = title + '\n' + link + '\n' + file_type + '\n' + time + '\n' + content + '\n\n'
-        with open('./maoyanmovie.txt', 'a+', encoding='utf-8') as article:
+        with open('./maoyanmovie.csv', 'a+', encoding='utf-8') as article:
             article.write(output)
         return item
