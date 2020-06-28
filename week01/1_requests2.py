@@ -4,7 +4,6 @@ from time import sleep
 import re
 import pandas as pd
 import lxml.etree
-from bs4 import BeautifulSoup as bs
 import os
 
 def get_user_agent():
