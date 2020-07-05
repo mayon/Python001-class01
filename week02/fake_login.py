@@ -5,10 +5,10 @@ from fake_useragent import UserAgent
 ua = UserAgent(verify_ssl=False)
 headers = {
     'User-Agent': ua.random,
-    'Referer' : 'https://shimo.im/login?from=home',
-    'Origin' : 'https://shimo.im',
-    'Host' : 'shimo.im',
-    'TE' : 'Trailers',
+    'Referer'   : 'https://shimo.im/login?from=home',
+    'Origin'    : 'https://shimo.im',
+    'Host'      : 'shimo.im',
+    'TE'        : 'Trailers',
     'Upgrade-Insecure-Requests' : '1',
 }
 
@@ -26,12 +26,3 @@ with requests.Session() as s:
     response2 = s.post(login_url, data = form_data, headers = headers, cookies = s.cookies)
     print(response2.status_code)
     print(response2.text)
-
-    # setting_url = 'https://accounts.douban.com/passport/setting'
-    # response2 = s.get(url=setting_url, headers=headers)
-
-    # with open('profile.html', 'w+') as f:
-    #     f.write(response2.text)
-
-    # newSession = requests.Session()
-    # response3 = newSession.get(setting_url, headers=headers, cookies = s.cookies)
