@@ -21,10 +21,13 @@ class MaoyanSpider(scrapy.Spider):
         selector = lxml.etree.HTML(response.text)
         links_xpath = '//*[@class="movie-item-hover"]/a/@href'
         links = selector.xpath(links_xpath)
+        print('-------------------------')
+        print(links)
+        print('-------------------------')
         for link in links:
             item = SpidersItem()
-            item['link'] = str(link)
-            yield scrapy.Request(url=link, meta={'item': item}, callback=self.parse2)
+            item['link'] = str('https://maoyan.com' + link)
+            yield scrapy.Request(url=item['link'], meta={'item': item}, callback=self.parse2)
 
     def parse2(self, response):
         selector = lxml.etree.HTML(response.text)
@@ -34,8 +37,10 @@ class MaoyanSpider(scrapy.Spider):
         time = selector.xpath('//*[@class="movie-brief-container"]/ul/li[3]/text()')
         content = selector.xpath('//*[@id="app"]/div/div[1]/div/div[3]/div[1]/div[1]/div[2]/span/text()')
         item['title'] = str(title[0])
-        item['file_type'] = str(title[0])
-        item['time'] = str(title[0])
-        item['content'] = str(title[0])
+        item['file_type'] = str(file_type[0])
+        item['time'] = str(time[0])
+        item['content'] = str(content[0])
+        print(item)
+        print('-------------------------')
         yield item
 

@@ -16,7 +16,7 @@ NEWSPIDER_MODULE = 'spiders.spiders'
 
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
-USER_AGENT = 'spiders (+http://www.yourdomain.com)'
+USER_AGENT = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.13; rv:76.0) Gecko/20100101 Firefox/76.0'
 
 # Obey robots.txt rules
 ROBOTSTXT_OBEY = False
@@ -46,9 +46,18 @@ DOWNLOAD_DELAY = 1
 
 # Enable or disable spider middlewares
 # See https://docs.scrapy.org/en/latest/topics/spider-middleware.html
-#SPIDER_MIDDLEWARES = {
-#    'spiders.middlewares.SpidersSpiderMiddleware': 543,
-#}
+SPIDER_MIDDLEWARES = {
+   'spiders.middlewares.SpidersSpiderMiddleware': 543,
+   'scrapy.downloadermiddlewares.useragent.UserAgentMiddleware': None,
+   'scrapy.downloadermiddlewares.httpproxy.HttpProxyMiddleware': None,
+   'spiders.middlewares.RandomHttpProxyMiddleware': 400,
+   'spiders.middlewares.RandomUserAgentMiddleware': 400,
+}
+
+HTTP_PROXY_LIST = [
+   'http://52.179.231.206:80',
+   'http://95.0.194.241:9090',
+]
 
 # Enable or disable downloader middlewares
 # See https://docs.scrapy.org/en/latest/topics/downloader-middleware.html

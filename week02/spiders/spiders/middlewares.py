@@ -5,8 +5,13 @@
 
 from scrapy import signals
 
-# useful for handling different item types with a single interface
-from itemadapter import is_item, ItemAdapter
+# useful for get random useragent
+from fake_useragent import UserAgent
+from scrapy.downloadermiddlewares.httpproxy import HttpProxyMiddleware
+from scrapy.exceptions import NotConfigured
+from collections import defaultdict
+from urllib.parse import urlparse
+import random
 
 
 class SpidersSpiderMiddleware:
@@ -101,3 +106,44 @@ class SpidersDownloaderMiddleware:
 
     def spider_opened(self, spider):
         spider.logger.info('Spider opened: %s' % spider.name)
+
+class RandomUserAgentMiddleware(object):
+    # def __init__(self, crawler):
+    #     super(RandomUserAgentMiddleware, self).__init__()
+    #     self.ua = UserAgent(verify_ssl=False)
+    #     self.ua_type = crawler.settings.get('RANDOM_UA_TYPE', 'random')
+
+    # @classmethod
+    # def from_crawler(cls, crawler):
+    #     print('from_crawler')
+    #     return cls(crawler)
+
+    # def process_request(self, request, spider):
+        # def get_ua():
+        #     return getattr(self.ua, self.ua_type)
+        # request.headers.setdefault('User-Agent', get_ua())
+    def process_request(self, request, spider):
+        ua = UserAgent(verify_ssl=False)
+        print(ua.random)
+        request.headers['User-Agent'] = ua.random
+
+class RandomHttpProxyMiddleware(HttpProxyMiddleware):
+
+    def __init__(self, auth_encoding='utf-8', proxy_list = None):
+        self.proxies = defaultdict(list)
+        for proxy in proxy_list:
+            parse = urlparse(proxy)
+            self.proxies[parse.scheme].append(proxy)
+        
+    @classmethod
+    def from_crawler(cls, crawler):
+        if not crawler.settings.get('HTTP_PROXY_LIST'):
+            raise NotConfigured
+
+        http_proxy_list = crawler.settings.get('HTTP_PROXY_LIST')
+        auth_encoding = crawler.settings.get('HTTPPROXY_AUTH_ENCODING', 'utf-8')
+        return cls(auth_encoding, http_proxy_list)
+
+    def _set_proxy(self, request, scheme):
+        proxy = random.choice(self.proxies[scheme])
+        request.meta['proxy'] = proxy
