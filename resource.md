@@ -10,8 +10,10 @@
     - [ ] 《提问的智慧》： https://github.com/ryanhanwu/How-To-Ask-Questions-The-Smart-Way/blob/master/README-zh_CN.md
     - [ ] Python 3.7.7 官方文档： https://docs.python.org/zh-cn/3.7/
     - [ ] GitHub 搜索帮助： https://help.github.com/cn/github/searching-for-information-on-github
-    - [ ] PEP8： https://www.python.org/dev/peps/pep-0008/
+    - [ ] PEP8 规范： https://www.python.org/dev/peps/pep-0008/
     - [ ] Google Python Style Guides： http://google.github.io/styleguide/pyguide.html
+    - [ ] Python 官方网站： https://www.python.org
+    - [ ] 字符编码：ASCII，Unicode 和 UTF-8：http://www.ruanyifeng.com/blog/2007/10/ascii_unicode_and_utf-8.html
 
 3. Git 下载地址：
 
@@ -22,6 +24,8 @@
     - 下载地址: https://www.python.org/downloads/
 
     - 安装方法: https://docs.python.org/zh-cn/3.7/using/windows.html
+
+    - Windows（用电脑浏览器):https://github.com/wilsonyin123/geekbangpython/blob/master/install_python_windows.pdf
 
 5. 常用 pip 源地址
     - 豆瓣： https://pypi.doubanio.com/simple/
@@ -71,6 +75,9 @@
 
 11. W3C 标准官方文档：
     - [ ] https://www.w3.org/standards/
+
+12. 常见通信端口：
+    - https://www.sojson.com/port.html
 
 ---
 
