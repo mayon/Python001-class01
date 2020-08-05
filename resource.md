@@ -82,7 +82,7 @@
 
 ---
 
-## Week 01
+## Week 01：requests 爬虫 & scrapy 爬虫
 
 1. requests 官方文档链接：
     - [ ] <https://requests.readthedocs.io/zh_CN/latest/>
@@ -121,7 +121,9 @@
     dont_filter 设置为 True，是用来解除去重功能。Scrapy 自带 url 去重功能，第二次请求之前会将已发送的请求自动进行过滤处理。
     所以将 dont_filter 设置为 True 起到的作用是解除去重功能，一旦设置成重 True，将不会去重，直接发送请求。
 
-## Week 02
+---
+
+## Week 02：反爬虫机制 & 分布式爬虫
 
 1. pretty_errors 官方文档链接：
     - [ ] <https://pypi.org/project/pretty-errors/>
@@ -170,7 +172,7 @@
 
 ---
 
-## Week 03
+## Week 03：多进程、多线程
 
 1. Twisted 学习参考文档：
     - [ ] <https://pypi.org/project/Twisted/>
@@ -225,10 +227,10 @@
 
 ---
 
-## week 04
+## week 04：数据清洗与预处理
 
 1. `pandas` 中文文档：
-    - [ ] <https://www.pypandas.cn/>
+    - [ ] <https://www.pypandas.cn/docs/>
 
 2. `sklearn-pandas` 安装参考文档：
     - [ ] <https://pypi.org/project/sklearn-pandas/1.5.0/>
@@ -261,3 +263,24 @@
     - [ ] <https://github.com/isnowfy/snownlp/blob/master/README.md>
 
 ---
+
+## week 06：Django Web 开发入门
+
+1. Django 官方文档：
+    - 注意：查看文档时，版本号要跟使用的 Django 版本号相同
+    - [ ] <https://docs.djangoproject.com/zh-hans/3.0/>
+
+2. Bootstrap 模板：
+    - <https://getbootstrap.com/>
+
+---
+
+## week 07：面向对象编程
+
+---
+
+## week 08：Python 高阶语法
+
+---
+
+## week 06：Django Web 开发进阶

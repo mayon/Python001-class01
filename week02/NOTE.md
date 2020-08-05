@@ -80,6 +80,8 @@ mysql > select * from moive;
 +----+--------------+-------------+-----------------+------------+------------------+
 |  1 | test11 movie | http://test | test movie info | 喜剧       | 2020-12-12       |
 +----+--------------+-------------+-----------------+------------+------------------+
+mysql > quit; # or
+mysql > exit;
 ```
 
 #### 数据库插件 pymysql 
@@ -87,9 +89,9 @@ mysql > select * from moive;
 ```
 dbInfo = {
     'host': 'localhost',
-    'port' : '1008',
+    'port' : 3306,
     'user' : 'root',
-    'password' : 'rootroot',
+    'password' : 'root1234',
     'db' : 'maoyan'
 }
 ...
