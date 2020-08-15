@@ -281,6 +281,21 @@
 
 ## week 08：Python 高阶语法
 
+1. collections 官方文档：
+    - [ ] https://docs.python.org/zh-cn/3.7/library/collections.html
+
+2. Flask 快速 Web 框架：
+    - [ ] https://flask.palletsprojects.com/en/1.1.x/
+
+3. aiohttp 快速 Web 框架：
+    - [ ] https://hubertroy.gitbooks.io/aiohttp-chinese-documentation/content/
+
+4. 《fluent python》
+
+5. ioloop
+https://docs.python.org/zh-cn/3/library/asyncio-tack.html
+
+
 ---
 
-## week 06：Django Web 开发进阶
+## week 09：Django Web 开发进阶
