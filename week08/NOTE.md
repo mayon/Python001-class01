@@ -93,9 +93,53 @@ def func():
 
 默认按顺序传递参数，如果要给函数指定某个参数，需要按照 key=value 形式赋值。
 
+可变参数要放到参数列表的最后，位置参数放到参数列表的前面，位置可变参数需要放在关键字可变参数之前。
+
+kwargs会截获所有的关键字参数，就算在调用函数时的形参中有类似x = 5形式的传参，形参x也不能得到该值.
+
 def func(*args, **kargs):
     print(f'args: {args}')       # 获取常规序列参数
     print(f'kargs: {kargs}')     # 获取所有 key=value 形式参数
+
+参数列表中的参数的一般顺序是：普通参数、缺省参数、可变位置参数、keyword-only参数（可带缺省值）、可变关键字参数。如下：
+
+```
+def fn(x, y, z=3, *arg, m=4, n, **kwargs):
+    print(x,y,z,m,n)
+    print(args)
+    print(kwargs)
+```
+
+#### keyword-only参数
+
+keyword-only参数是在 Python3 中加入的。如果在一个星号参数后，或者一个位置可变参数后，出现普通参数，那么这个参数就为 keyword-only 参数。
+
+```
+def fn(*args, x):
+    print(x)
+    print(args)
+fn(3,5)
+fn(3,5,7)
+fn(3,5,x=7)
+```
+
+keyword-only参数另一种形式：*号之后跟普通形参，示例如下：
+
+```
+def fn(*, x,y):
+    print(x,y)
+fn(x=5,y=6)
+
+```
+
+#### 函数参数解构
+
+参数解构时，非字典类型的实参使用*解构成位置参数；
+
+字典类型使用**解构成关键字参数。
+
+注意：提取出来的元素数目要和参数的要求匹配，也要和参数的类型匹配。
+
 
 #### 偏函数
 
