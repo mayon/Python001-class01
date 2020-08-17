@@ -2,16 +2,25 @@
 
 ## 1. 数据类型
 
-##### 可变数据类型
+##### 可变数据类型（不可哈希）
 
-list、dict、collections.deque
+list、dict、set、collections.deque
 
-##### 不可变数据类型
-int、float、string、tuple
+##### 不可变数据类型（可哈希）
+
+int、float、string、tuple、对象集 object
+
+集合内部只可以存放可哈希数据。
 
 改变不可变数据类型，id() 值会发生变化；改变可变数据类型中的值，id() 值不会发生变化
 
 ## 2. 序列
+
+#### 容器
+
+容器就是一个用来存储多个元素的数据结构，常见的容器包括【列表】、【元组】、【字典】、【集合】、【字符串】。
+
+容器有两个特点：1. 容器中的元素可通过迭代获取 2. 所有容器中的元素被存储在内存中。
 
 ##### 容器序列
 
@@ -635,15 +644,45 @@ for i in gene:
 # next(gene)
 ```
 
-迭代器协议：
+#### 迭代器协议：
 
 Iterables(可迭代): 包含 `__getitem__()` 或 `__iter__()` 方法的容器对象
 
-Iterator(迭代器): 包含 `__next__()` 和 `__iter__()` 方法, 分别是 next() 和 iter() 的魔术方法
+可以用for…in…这类语句迭代读取一条数据供我们使用的对象称为可迭代对象，可以用isinstance()判断是否是可迭代对象。
+
+- 可迭代对象，简单的说就是可以被迭代获取的对象。
+- 通过使用iter()方法，我们能将可迭代对象返回成迭代器。
+
+```
+list_a = ['a', 'b', 'c']
+isinstance(list_a, Iterable) # True
+new_a = iter(list_a)
+next(new_a)   # a
+next(new_a)   # b
+next(new_a)   # c
+next(new_a)   # raise StopIteration
+```
+
+Iterator(迭代器): 包含 `__next__()` 和 `__iter__()` 方法, 分别是 next() 和 iter() 的魔术方法.
+
+- 迭代器是一个带状态的对象，迭代器内部持有一个状态，该状态用于记录当前迭代所在位置，以便于下次迭代的时候获取正确的元素。
+- 迭代器可以通过next()方法来迭代获取下一个值。
+- 迭代器不会一次性吧所有元素都加载到内存，而是需要的时候才返回结果。
 
 Generator(生成器): 包含 yield 语句的函数, 实现了完整的迭代器协议.
 
 只要一个函数的定义中出现了 yield 关键词，则此函数将不再是一个函数，而成为一个 ”生成器构造函数“，调用此构造函数即可产生一个生成器对象。
+
+生成器是一种特殊的迭代器。特殊在我们可以通过send()方法像生成器中传入数据，而迭代器只能将数据输出。
+
+其主要的特点有：
+
+1. 生成器拥有迭代器的迭代传出数据的功能，但用关键字yield来替代迭代器中的__next__()方法来实现，而拥有yield关键字的函数就是生成器函数。
+2. 生成器可以传入数据进行计算(不同于迭代器)，并根据变量内容计算结果后返回。
+3. 迭代器不会一次把所有的元素加载到内存，而是调用的时候才生成返回结果(这点相同于迭代器)
+4. 可以通过for循环进行迭代(因为生成器是迭代器)
+
+总结：生成器是一种特殊的迭代器，其具有传入数据的功能。
 
 ```
 def func():
@@ -698,11 +737,32 @@ def jumping_range(up_to):
 
 if __name__ == '__main__':
     iterator = jumping_range(6)
-    print(next(iterator))        # 第一次通信停留在 yield index，得到返回值 0
+    print(next(iterator))         # 第一次通信停留在 yield index，得到返回值 0
+    # print(iterator.send(None))  # 同上作用，generator start 第一次 send 必须传递 None
     print(iterator.send(2))
     print(iterator.send(-1))
     for x in iterator:
         print(x)
+```
+
+```
+def generator_1():
+    x = 0
+    r = 'here'
+    while True:
+        print(f'x is {x}')
+        x = yield r
+g_1 = generator_1()
+print(g_1.send(None))
+print(g_1.send(1))
+print(g_1.send(2))
+
+# x is 0
+# here
+# x is 1
+# here
+# x is 2
+# here
 ```
 
 ## 12. 协程
