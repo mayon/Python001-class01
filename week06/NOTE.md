@@ -59,6 +59,7 @@ django-admin startproject MyDjango    # create project
 cd MyDjango
 python manage.py help                 # get django help info
 python manage.py startapp index       # create index module
+python manage.py runserver            # Starting Server http://127.0.0:8000/
 ```
 
 - 启动项目：测试完成后，把代码运行模式关闭，以避免上传到云端后产生漏洞泄露
@@ -145,7 +146,7 @@ class FourDigitYearConverter:
 
   1. 在 models.py 中创建 Table, 一个 Table 对应 一个 Class
 
-```
+``
     from django.db import models
 
     # Create your models here.
@@ -157,8 +158,12 @@ class FourDigitYearConverter:
         name = models.CharField(max_length = 50)
         author = models.CharField(max_length = 50)
         stars = models.CharField(max_length = 5)
-    ```
-    2. 将 models.py 转化成数据表
+```
+
+  2. 将 models.py 转化成数据表
+    - python manage.py makemigrations   # 将 models.py 转成中间文件
+    - python manage.py migrate          # 将中间文件转成 sql 文件
+
     ```
     $ > python manage.py makemigrations
     Migrations for 'index':
