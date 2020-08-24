@@ -329,7 +329,116 @@ gunicorn --h
 
 ```
 
-## 8. Flask 框架解析
+## 8. Django 定时任务 Celery - 分布式消息队列
+
+**Celery 使用方法：**
+
+1. **安装 Redis 依赖（用于存储）**
+
+    1. 下载安装包：https://redis.io/
+
+    2. 解压安装包 redis-6.0.6.tar.gz
+
+    3. 进入解压后安装包：包内有可编译文件 Makefile，使用下面命令进行编译
+    ```
+    >>> make install
+    ```
+    4. redis.conf 发布前必须修改配置项
+    ```
+    daemonize no       # 如果是正式环境，即非调试环境，需要改成 yes，让它变成守护进程
+    bind 127.0.0.1     # 如果发布，需要改成 0.0.0.0 允许所有人访问
+    requirepass 123456 # 发布前，需要设置访问密码
+    ```
+    5. 启动 Redis 服务：复制 redis.conf 到项目根目录，也可以放在其他目录，启动时加上 path 即可
+    ```
+    >>> redis-server redis.conf
+    ```
+
+2. **安装 Celery**
+
+```
+pip install celery
+pip install redis==2.10.6    # python 版本 redis 驱动
+pip install celery-with-redis
+pip install django-celery    # 关联 Django 和 Celery
+```
+
+> 版本兼容问题
+> python 3.7 之后，async 成为保留关键字，如果用包含该关键字的方法或模块就会报错。
+> 很多其他的包也会有这个问题，遇到类似问题要么将 python 降级，要么就是手动修改这些依赖包。
+
+上述 Celery 相关软件包下载完成后会有一个 kombu 包，里面包含 async 模块，该模块需要改名后才能正常引用。
+
+3. **添加 APP**
+```
+django-admin startproject MyDjango
+python manager.py startapp djcron
+
+# setting.py
+INSTALL_APPS=[
+    'djcelery',
+    'djcron'
+]
+```
+
+4. **迁移生成表**
+```
+python manage.py migrate
+```
+
+5. **配置 Django 时区**
+```
+from celery.schedules import crontab
+from celery.schedules import timedelta
+import djcelery
+djcelery.setup_loader()
+BROKER_URL = 'redis://:123456@127.0.0.1:6379/'    # 代理人
+CELERY_IMPORTS = ('djcron.tasks')   # app
+CELERY_TIMEZONE = 'Asia/Shanghai'   # 时区
+CELERYBEAT_SCHEDULER = 'djcelery.schedulers.DatabaseScheduler'   # 定时任务调度器
+```
+
+6. **在 MyDjango 下建立 Celery.py**
+```
+import os
+form celery import Celery, platforms
+from django.conf import settings
+os.environ.setdefault('DJANGO_SETTINGS_MODULE','MyDjango.settings')
+app = Celery('MyDjango')
+app.config_from_object('django.conf:settings')
+app.autodiscover_tasks(lambda: settings.INSTALLED_APPS)
+platforms.C_FORCE_ROOT = True
+```
+
+7. **在 __init__.py 增加**
+```
+# 使用绝对引入，后续使用 import 引入会忽略当前目录下的包
+from __future__ import absolute_import
+from .celery import app as celery_app
+```
+
+8. **添加的当时任务 Celery**
+```
+# task.py
+from MyDjango.celery import app
+
+@app.task()
+def task1():
+    return 'test1'
+@app.task()
+def task2():
+    return 'test2'
+```
+
+9. **启动定时任务**
+```
+>>> celery -A MyDjango beat -l info
+>>> celery -A MyDjango worker -l info
+```
+
+10. **也可以通过 admin 增加定时任务**
+
+## 9. Flask 框架解析
 
 可插拔框架，微型 Web 框架。
 
@@ -393,7 +502,7 @@ if __name__ == '__main__':
     app.run()
 ```
 
-## 9. 其他常用框架
+## 10. 其他常用框架
 
 - 底层框架：(熟悉以下其中一个底层框架的原理)
     - Tornado：Web 框架和 HTTP 服务器，支持异步，兼容性最好，队列分片操作，只有有一个操作出错就会挂掉
