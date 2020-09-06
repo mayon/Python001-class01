@@ -17,7 +17,7 @@ def index(request):
     sentiment_large = all_comments.filter(sentiment__gte=0.5).count()
     sentiment_small = comments_sum - sentiment_large
 
-    goodss = all_comments.values('goods_title', 'goods_author').annotate(comment_count=Count('goods_title'), goods_sentiment=Avg('sentiment'))
+    goodss = all_comments.values('goods_title', 'goods_author').annotate(comment_count=Count('goods_title'), goods_sentiment=Avg('sentiment')).order_by('-goods_sentiment')
     comments = all_comments.order_by('-sentiment')[:10]
     return render(request, 'index.html', locals())
 

@@ -19,7 +19,7 @@ class CommentSpider(scrapy.Spider):
     def parse_goods(self, response):
         items = []
         goods_list = Selector(response=response).xpath('//li[@class="feed-row-wide"]')
-        for i in goods_list[:10]:
+        for i in goods_list[:11]:
             item = GoodsItem()
             title = i.xpath('./div/div[2]/h5/a/text()').extract_first().strip()
             link = i.xpath('./div/div[2]/h5/a/@href').extract_first().strip()
@@ -49,17 +49,17 @@ class CommentSpider(scrapy.Spider):
         selector = Selector(response=response)
         goods_title = selector.xpath('//h1[@class="title J_title"]/text()').extract_first().strip()
         goods_author = selector.xpath('//span[@class="name"]/text()').extract_first().strip()
-        print(f'{goods_title}\t{goods_author}\t')
+        # print(f'{goods_title}\t{goods_author}\t')
 
         comment_list = selector.xpath('//div[@class="comment_conBox"]')
-        print(comment_list)
+        # print(comment_list)
         for cmt in comment_list:
             author = cmt.xpath('./div[1]/a/span/text()').extract_first().strip()
             if author == goods_author + '（爆料人）':
                 author = goods_author
             content = cmt.xpath('./div[@class="comment_conWrap"]/div[1]/p/span/text()').extract_first().strip()
             comment_time = cmt.xpath('./div[1]/div[1]/text()').extract_first().strip()
-            print(f'{author}\t{content}\t{comment_time}\t')
+            # print(f'{author}\t{content}\t{comment_time}\t')
             item = CommentItem()
             item['author'] = author
             item['content'] = content
