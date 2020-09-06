@@ -8,7 +8,7 @@ import time
 class CommentSpider(scrapy.Spider):
     name = 'comment'
     allowed_domains = ['smzdm.com']
-    start_urls = ['https://www.smzdm.com/fenlei/diannaoyouxi/']
+    start_urls = ['https://www.smzdm.com/fenlei/zhinengshouji/h5c4s0f0t0p1/#feed-main/']
 
     # def parse(self, response):
     #     pass
@@ -19,13 +19,13 @@ class CommentSpider(scrapy.Spider):
     def parse_goods(self, response):
         items = []
         goods_list = Selector(response=response).xpath('//li[@class="feed-row-wide"]')
-        for i in goods_list[:11]:
+        for i in goods_list[:10]:
             item = GoodsItem()
             title = i.xpath('./div/div[2]/h5/a/text()').extract_first().strip()
             link = i.xpath('./div/div[2]/h5/a/@href').extract_first().strip()
             item['title'] = title
             item['link'] = link
-            item['tag'] = 'diannaoyouxi'
+            item['tag'] = 'zhinengshouji'
             items.append(item)
         return items
 
@@ -67,7 +67,7 @@ class CommentSpider(scrapy.Spider):
             item['goods_title'] = goods_title
             item['goods_author'] = goods_author
             item['created_time'] = time.strftime("%Y-%m-%d %H:%M", time.localtime())
-            item['tag'] = 'diannaoyouxi'
+            item['tag'] = 'zhinengshouji'
             items.append(item)
         return items
 
