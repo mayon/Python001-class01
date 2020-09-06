@@ -23,7 +23,8 @@ class SmzdmPipeline:
         goods_title = item['goods_title']
         goods_author = item['goods_author']
         created_time = item['created_time']
-        value = (author, comment_time, content, goods_title, goods_author, created_time)
+        tag = item['tag']
+        value = (author, comment_time, content, goods_title, goods_author, created_time, tag)
 
         db = ConnDB()
         db.insert_comment(value)

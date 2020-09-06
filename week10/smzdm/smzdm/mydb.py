@@ -49,7 +49,7 @@ class ConnDB(object):
 
     def insert_comment(self, value):
         table_name = 'comment'
-        sql = 'INSERT INTO ' + table_name + '(author,comment_time,content, goods_title, goods_author, created_time) VALUES(%s,%s,%s,%s,%s,%s);';
+        sql = 'INSERT INTO ' + table_name + '(author, comment_time, content, goods_title, goods_author, created_time, tag) VALUES(%s,%s,%s,%s,%s,%s,%s);';
         self.run(sql, value)
 
     def get_comments(self):

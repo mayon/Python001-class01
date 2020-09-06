@@ -67,6 +67,7 @@ class CommentSpider(scrapy.Spider):
             item['goods_title'] = goods_title
             item['goods_author'] = goods_author
             item['created_time'] = time.strftime("%Y-%m-%d %H:%M", time.localtime())
+            item['tag'] = 'diannaoyouxi'
             items.append(item)
         return items
 
@@ -75,10 +76,3 @@ class CommentSpider(scrapy.Spider):
         if '分钟前' not in timestr and '小时前' not in timestr:
             newtime = time.strftime("%Y", time.localtime()) + '-' + newtime
         return newtime
-    #     if '分钟前' in timestr:
-    #         mt = 60 - int(timestr.replace('分钟前', ''))
-    #         return time.strftime("%Y-%m-%d %H", time.localtime()) + ':' + str(m)
-    #     if '小时前' in timestr:
-    #         ht = 60 - int(timestr.replace('分钟前', ''))
-    #         if ()
-    #         item['arc_time'] = time.strftime("%Y-%m-%d", time.localtime())  # 24小时之前，一律替换成当天日期 

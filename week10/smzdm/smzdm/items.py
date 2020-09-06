@@ -25,3 +25,4 @@ class CommentItem(scrapy.Item):
     goods_title = scrapy.Field()
     goods_author = scrapy.Field()
     created_time = scrapy.Field()
+    tag = scrapy.Field()
