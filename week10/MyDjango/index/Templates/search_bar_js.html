@@ -1,0 +1,58 @@
+{% load static %}
+<script type="text/javascript" src="{% static 'assets/bootstrap-datepicker/js/bootstrap-datepicker.js' %}"></script>
+<script>
+    //date picker start
+    $(function() {
+        // insert style
+        var ele = document.createElement('style');
+        ele.innerHTML = `
+            .search-bar {
+                display: flex;
+                flex-direction: row-reverse;
+            }
+        `;
+        document.getElementsByTagName('head')[0].appendChild(ele);
+
+        //获取url中的参数
+        function getUrlParam(name) {
+            var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)"); //构造一个含有目标参数的正则表达式对象
+            var r = window.location.search.substr(1).match(reg); //匹配目标参数
+            if (r != null) return decodeURIComponent(r[2]);
+            return null; //返回参数值
+        }
+
+        // innert params
+        $('select[name="time_type"]').val(getUrlParam('time_type') || 'created_time');
+        $('input[name="from"]').val(getUrlParam('from') || '');
+        $('input[name="to"]').val(getUrlParam('to') || '');
+        $('input[name="keyword"]').val(getUrlParam('keyword') || '');
+
+        // disabling dates
+        var nowTemp = new Date();
+        var now = new Date(nowTemp.getFullYear(), nowTemp.getMonth(), nowTemp.getDate(), 0, 0, 0, 0);
+
+        var checkin = $('.dpd1').datepicker({
+            format: "yyyy-mm-dd",
+            onRender: function(date) {
+                return date.valueOf() < now.valueOf() ? 'disabled' : '';
+            }
+        }).on('changeDate', function(ev) {
+            if (ev.date.valueOf() > checkout.date.valueOf()) {
+                var newDate = new Date(ev.date)
+                newDate.setDate(newDate.getDate() + 1);
+                checkout.setValue(newDate);
+            }
+            checkin.hide();
+            $('.dpd2')[0].focus();
+        }).data('datepicker');
+        var checkout = $('.dpd2').datepicker({
+            format: "yyyy-mm-dd",
+            onRender: function(date) {
+                return date.valueOf() <= checkin.date.valueOf() ? 'disabled' : '';
+            }
+        }).on('changeDate', function(ev) {
+            checkout.hide();
+        }).data('datepicker');
+    });
+    //date picker end
+</script>
