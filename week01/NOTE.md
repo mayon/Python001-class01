@@ -88,3 +88,16 @@ scrapy crawl spiderName
   - `/` : 逐级开始查找（浏览器默认给定）
   -`@href` : 取属性，如 `/div[@class="hd"]`
   -`text()` : 取 text
+
+- 可能错误：
+
+返回值为非 items 时，如果用 return ，会报错 TypeError: 'Request' object is not iterable。
+return scrapy.Request(self.start_urls, callback=self.parse_link)
+ 
+有两种解决方法:
+
+1.使用yield, 把return换为yield
+yield scrapy.Request(self.start_urls, callback=self.parse_link)
+ 
+2.使用return, 加个方括号, 转化为列表
+return [scrapy.Request(self.start_urls, callback=self.parse_link)]
